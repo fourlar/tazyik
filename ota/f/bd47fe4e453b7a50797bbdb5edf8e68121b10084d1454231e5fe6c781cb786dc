@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#f3e3c0">
+<meta name="description" content="Tazyik: 64 bölümde basınçlı yıkama ve halı temizleme oyunu.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>Tazyik — Basınçlı Yıkama</title>
+  <script type="module" crossorigin src="./assets/index-GwNjxrHv.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/dist-Df2lF_67.js">
+  <link rel="modulepreload" crossorigin href="./assets/i18n-Dn2k4dfC.js">
+  <link rel="modulepreload" crossorigin href="./assets/definitions-BdWVgBTV.js">
+  <link rel="modulepreload" crossorigin href="./assets/definitions-DlpntO5o.js">
+  <link rel="stylesheet" crossorigin href="./assets/index-CkC9Ikqq.css">
+</head>
+<body>
+<div id="wrap"><div id="stage">
+  <canvas id="game"></canvas>
+
+  <div class="hud hidden" id="hud">
+    <button class="btn-ic" id="pause" data-ta="pauseA" aria-label="Duraklat"><i data-ic="pause" data-s="20"></i></button>
+    <div class="bar-wrap">
+      <div class="bar-top"><span id="lvName">—</span><span class="bt-r"><span id="starNow"></span><span><span id="pct">0</span>%</span></span></div>
+      <div class="bar"><i id="barFill"></i></div>
+      <div class="minis">
+        <span id="starTxt"></span>
+        <div class="mini hidden" id="waterRow"><i data-ic="drop" data-s="13"></i><div class="bar"><i id="waterFill"></i></div></div>
+        <div class="mini hidden" id="sudRow"><span id="sudIc"><i data-ic="drop" data-s="13"></i></span><div class="bar"><i id="sudFill"></i></div><span id="sudTxt"></span></div>
+        <div class="mini hidden" id="heatRow"><i data-ic="flame" data-s="13"></i><div class="bar"><i id="heatFill"></i></div></div>
+      </div>
+    </div>
+    <div class="finish-row hidden" id="finishRow"><button class="finish-btn" id="finishBtn" disabled data-t="finish">Bitir</button></div>
+    <span class="hidden"><span id="time"></span><i id="starFill"></i></span>
+  </div>
+  <div class="tools hidden" id="tools"></div>
+  <div class="hint hidden" id="hint"><i data-ic="touch" data-s="20"></i> <span data-t="hint0"></span></div>
+  <div class="hik hidden" id="hik" aria-live="polite"></div>
+  <div class="tip hidden" id="tip"></div>
+  <div class="warn hidden" id="warn"></div>
+
+  <div class="screen" id="menu">
+    <div class="hero">
+    <div class="topbar"><span class="coins"><i data-ic="coin" data-s="16"></i> <span class="coinVal">0</span></span><span class="tb-r"><button class="gear" id="openHow" data-ta="how" aria-label="Nasıl oynanır"><i data-ic="help" data-s="20"></i></button><button class="gear" id="openSet" data-ta="settings" aria-label="Ayarlar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h8M18 7h2M4 12h2M12 12h8M4 17h10M20 17h0"/><circle cx="15" cy="7" r="2.4"/><circle cx="9" cy="12" r="2.4"/><circle cx="17" cy="17" r="2.4"/></svg></button><button class="shopbtn" id="openShop"><i data-ic="cart" data-s="17"></i> <span data-t="shop"></span></button></span></div>
+    <h1 data-t="brand">TAZYİK</h1>
+    </div>
+    <div class="sub" data-t="sub"></div>
+    <p class="save-note hidden" id="saveNote" role="status"></p>
+    <button class="play hidden" id="playBtn"></button>
+    <button class="daily ota hidden" id="otaBtn"><span class="di"><i data-ic="drop" data-s="22"></i></span><span><span class="ot"></span><small></small></span><span class="go">›</span></button>
+    <button class="daily hidden" id="dailyBtn"></button>
+    <button class="daily ord hidden" id="ordBtn"></button>
+    <button class="daily free hidden" id="freeBtn"></button>
+    <button class="daily cam hidden" id="camBtn"></button>
+    <div id="levels"></div>
+  </div>
+  <div class="hidden" id="camScr">
+    <canvas id="camCv"></canvas>
+    <div class="hud"><button class="btn-ic" id="camBack" aria-label="Menü">‹</button><div class="bar-wrap"><div class="bar-top"><span id="camName"></span><span id="camPct">%0</span></div><div class="bar"><i id="camBar"></i></div><div class="camtip" id="camTip"></div></div><button class="finish-btn" id="camDone" disabled></button></div>
+    <div class="tools" id="camTools"></div>
+    <div class="modal hidden pause-layer" id="camWin" role="dialog" aria-modal="true"><div class="card"><h2 id="camTitle"></h2><div class="stars" id="camStars"></div><p class="muted" id="camRes"></p><p class="story" id="camStory"></p><div class="row"><button class="b s" id="camMenu"></button><button class="b p hidden" id="camNext"></button><button class="b p" id="camAgain"></button></div></div></div>
+  </div>
+
+  <div class="screen hidden" id="defScr">
+    <div class="topbar"><button class="shopbtn" id="closeDef" data-t="back">‹ Geri</button></div>
+    <h1 style="font-size:30px" data-t="defter"></h1>
+    <div class="how" id="defList"></div>
+  </div>
+
+  <div class="screen hidden" id="howScr">
+    <div class="topbar"><button class="shopbtn" id="closeHow" data-t="back">‹ Geri</button></div>
+    <h1 style="font-size:30px" data-t="how"></h1>
+    <div class="how" id="howList"></div>
+  </div>
+
+  <div class="screen hidden" id="freeScr">
+    <div class="topbar"><button class="shopbtn" id="freeBack"></button></div>
+    <h1 style="font-size:30px" id="freeTitle"></h1>
+    <div class="sub" id="freeNote"></div>
+    <div class="row ftabs" id="freeTabs"></div>
+    <button class="daily free" id="freeRand"></button>
+    <div class="grid fgrid" id="freeGrid"></div>
+  </div>
+  <div class="screen hidden" id="shopScr">
+    <div class="topbar"><button class="shopbtn" id="closeShop" data-t="back">‹ Geri</button><span class="coins"><i data-ic="coin" data-s="16"></i> <span class="coinVal">0</span></span></div>
+    <h1 style="font-size:34px" data-t="shopT"></h1>
+    <div class="sub" data-t="shopSub"></div>
+    <div class="shop" id="shopList"></div>
+  </div>
+
+  <div class="modal hidden" id="fail">
+    <div class="card">
+      <h2 data-t="failT"></h2>
+      <div class="muted" id="failInfo" data-t="failD"></div>
+      <div class="row"><button class="b p" id="adWater"><i data-ic="drop" data-s="16"></i> <span data-t="freeWater"></span></button></div>
+      <div class="row"><button class="b s" id="failMenu" data-t="menu"></button><button class="b s" id="failRetry" data-t="retry"></button></div>
+    </div>
+  </div>
+  <div class="modal hidden" id="win">
+    <div class="card">
+      <h2 data-t="winT"></h2>
+      <div class="stars" id="stars"></div>
+      <div class="earn" id="earn"></div>
+      <div class="muted" id="winInfo"></div>
+      <p class="story" id="winStory"></p>
+      <div class="row"><button class="b s" id="beforeBtn" data-t="before"></button><button class="b s" id="shareBtn" style="flex:none;padding:13px 16px"><i data-ic="share" data-s="16"></i> <span data-t="share"></span></button></div>
+      <div class="row">
+        <button class="b s" id="menuBtn" data-t="menu"></button>
+        <button class="b s" id="retryBtn" data-t="retry"></button>
+        <button class="b p" id="nextBtn" data-t="next"></button>
+      </div>
+    </div>
+  </div>
+  <div class="modal hidden pause-layer" id="setScreen" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+    <div class="card"><h2 id="setTitle" data-t="settings"></h2>
+      <div class="row"><button class="b s" id="setSound">Ses</button></div>
+      <div class="row"><button class="b s" id="setHaptic">Titreşim</button></div>
+      <div class="row hidden" id="setOlcumRow"><button class="b s" id="setOlcum"></button></div>
+      <div class="row"><button class="b s" id="setLang"></button></div>
+      <div class="row"><button class="b s" id="setPriv"></button></div>
+      <div class="row"><button class="b s" id="setSupport"></button></div>
+      <div class="row"><button class="b p" id="setClose" data-t="ok"></button></div>
+      <div class="row"><button class="b s danger" id="setReset">İlerlemeyi sıfırla</button></div>
+      <p class="muted ver">Tazyik 1.0.0</p>
+    </div>
+  </div>
+  <div class="modal hidden pause-layer" id="ordScreen" role="dialog" aria-modal="true" aria-labelledby="ordWho">
+    <div class="card"><div class="muted" data-t="ordT"></div><h2 id="ordWho"></h2>
+      <p class="priv" id="ordAsk"></p><div class="ordjobs" id="ordJobs"></div>
+      <div class="row"><button class="b p" id="ordGo"></button></div>
+      <div class="row"><button class="b s" id="ordDef" data-t="defter"></button><button class="b s" id="ordClose" data-t="ok"></button></div>
+    </div>
+  </div>
+  <div class="modal hidden pause-layer" id="ordDone" role="dialog" aria-modal="true" aria-labelledby="odWho">
+    <div class="card"><div class="muted" data-t="ordDone"></div><h2 id="odWho"></h2>
+      <img class="odimg" id="odImg" alt=""><p class="priv" id="odThx"></p><div class="earn" id="odEarn"></div>
+      <div class="row"><button class="b s hidden" id="odShare" style="flex:none;padding:13px 16px"><i data-ic="share" data-s="16"></i> <span data-t="share"></span></button><button class="b p" id="odOk" data-t="ok"></button></div>
+    </div>
+  </div>
+  <div class="modal hidden pause-layer" id="hikCard" role="dialog" aria-modal="true" aria-labelledby="hkT">
+    <div class="card"><div class="muted" id="hkTop"></div><h2 id="hkT"></h2>
+      <canvas class="hkcv" id="hkCv" width="640" height="400"></canvas><p class="priv" id="hkD"></p>
+      <div class="row"><button class="b s" id="hkDef" data-t="defter"></button><button class="b p" id="hkOk" data-t="ok"></button></div>
+    </div>
+  </div>
+  <div class="modal hidden pause-layer" id="privScreen" role="dialog" aria-modal="true" aria-labelledby="privTitle">
+    <div class="card"><h2 id="privTitle" data-t="privacy"></h2>
+      <p class="muted priv" data-t="priv0"></p>
+      <ul class="muted priv"><li data-t="priv1"></li><li data-t="priv2"></li><li data-t="priv3"></li><li data-t="priv4"></li></ul>
+      <div class="row"><button class="b p" id="privClose" data-t="ok"></button></div>
+    </div>
+  </div>
+  <div class="modal hidden pause-layer" id="langScreen" role="dialog" aria-modal="true">
+    <div class="card"><h2 data-t="lang"></h2><div class="langs" id="langList"></div></div>
+  </div>
+  <div class="modal hidden pause-layer" id="pauseScreen" role="dialog" aria-modal="true" aria-labelledby="pauseTitle">
+    <div class="card"><h2 id="pauseTitle" data-t="paused"></h2>
+      <div class="row"><button class="b p" id="resume" data-t="resume"></button><button class="b s" id="pauseMenu" data-t="menu"></button></div>
+      <div class="row"><button class="b s" id="mute">Ses</button></div>
+    </div>
+  </div>
+</div></div>
+
+</body>
+</html>
